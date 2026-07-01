@@ -1,80 +1,125 @@
-# 🎥 YouTube AI Chat Chrome Extension
+# 🎥 YouTube AI Chat Extension
 
-An AI-powered Chrome Extension that lets users chat with any YouTube video's transcript using **LangChain**, **FAISS**, **FastAPI**, and **Llama 3.1**.
+An AI-powered Chrome Extension that allows users to chat with any YouTube video using Retrieval-Augmented Generation (RAG).
 
-Simply enter a YouTube Video ID, load the transcript, and ask questions about the video. The extension retrieves relevant transcript chunks using Retrieval-Augmented Generation (RAG) and answers questions based only on the video's content.
+The extension automatically detects the currently opened YouTube video, retrieves its transcript, creates a semantic vector database using FAISS, and answers user questions using Llama 3.1 through LangChain.
 
 ---
 
 # 🚀 Features
 
-- 📺 Chat with any YouTube video transcript
-- 🤖 AI-powered answers using Llama 3.1
-- 🔍 Retrieval-Augmented Generation (RAG)
-- 📑 Automatic transcript retrieval
-- ⚡ FAISS vector database for semantic search
-- 🧠 Sentence Transformer embeddings
-- 🌐 Chrome Extension frontend
-- 🚀 FastAPI backend
-- ☁️ Deployable backend (Railway, Render, Azure, AWS, etc.)
+- 🎥 Automatically detects the current YouTube video
+- 📜 Retrieves English YouTube transcripts
+- 🤖 Chat with any supported YouTube video
+- 🧠 Retrieval-Augmented Generation (RAG)
+- 🔍 Semantic search using FAISS
+- ⚡ FastAPI backend
+- 🦜 LangChain pipeline
+- 💬 Interactive Chrome Extension UI
+- 🚀 Easily deployable backend
 
 ---
 
-# 🏗️ Project Architecture
+# 📸 Demo Workflow
 
 ```
-                    User
-
-          Chrome Extension
-        (popup.html + popup.js)
-                 │
-                 │ HTTP Request
-                 ▼
-         FastAPI Backend
-         (Python + LangChain)
-                 │
-      -------------------------
-      │                       │
-      ▼                       ▼
-YouTube Transcript API     HuggingFace
-                            Llama 3.1
-
-                 │
-                 ▼
-          Sentence Transformer
-          Embeddings
-
-                 │
-                 ▼
-             FAISS Index
-
-                 │
-                 ▼
-            Relevant Context
-
-                 │
-                 ▼
-             AI Response
+Open YouTube Video
+        │
+        ▼
+Click Extension
+        │
+        ▼
+Automatically Detect Video ID
+        │
+        ▼
+Load Transcript
+        │
+        ▼
+Build FAISS Vector Store
+        │
+        ▼
+Ask Questions
+        │
+        ▼
+AI Answers from Transcript
 ```
 
 ---
 
-# 📁 Project Structure
+# 🏗️ Architecture
+
+```
+                     User
+
+                      │
+                      ▼
+
+          Chrome Extension (Popup)
+
+                      │
+                      ▼
+
+              FastAPI Backend
+
+                      │
+
+      ┌───────────────┴───────────────┐
+      ▼                               ▼
+
+YouTube Transcript API          Hugging Face Llama 3.1
+
+      │                               ▲
+      ▼                               │
+
+Transcript                LangChain Prompt
+
+      │
+      ▼
+
+Text Splitter
+
+      │
+      ▼
+
+Sentence Transformers
+
+      │
+      ▼
+
+FAISS Vector Store
+
+      │
+      ▼
+
+Retriever
+
+      │
+      ▼
+
+AI Response
+```
+
+---
+
+# 📂 Project Structure
 
 ```
 youtube-chat-extension/
 
 │
+
 ├── backend/
-│   │
+
 │   ├── app.py
 │   ├── rag.py
 │   ├── requirements.txt
 │   ├── .env
 │   └── ...
+
 │
+
 └── extension/
-    │
+
     ├── manifest.json
     ├── popup.html
     ├── popup.css
@@ -85,31 +130,35 @@ youtube-chat-extension/
 
 ---
 
-# 🛠️ Technologies Used
+# 🛠 Technologies Used
 
-### Backend
+## Backend
 
 - Python
 - FastAPI
 - LangChain
 - HuggingFace
-- Llama 3.1 8B
 - FAISS
 - Sentence Transformers
 - YouTube Transcript API
 
-### Frontend
+## Frontend
 
 - HTML
 - CSS
 - JavaScript
 - Chrome Extension Manifest V3
 
+## AI
+
+- Llama 3.1 8B Instruct
+- all-MiniLM-L6-v2 Embeddings
+
 ---
 
 # ⚙️ Installation
 
-## 1. Clone Repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/yourusername/youtube-chat-extension.git
@@ -119,7 +168,7 @@ cd youtube-chat-extension
 
 ---
 
-## 2. Create Virtual Environment
+## Create Virtual Environment
 
 Windows
 
@@ -129,7 +178,7 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-Linux / Mac
+Linux / macOS
 
 ```bash
 python3 -m venv venv
@@ -139,7 +188,7 @@ source venv/bin/activate
 
 ---
 
-## 3. Install Dependencies
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -147,15 +196,9 @@ pip install -r requirements.txt
 
 ---
 
-## 4. Create .env File
+## Configure Environment Variables
 
-Inside the backend folder create
-
-```
-.env
-```
-
-Add your HuggingFace API Key
+Create a `.env` file inside the backend folder.
 
 ```env
 HF_TOKEN=YOUR_HUGGINGFACE_API_KEY
@@ -163,7 +206,7 @@ HF_TOKEN=YOUR_HUGGINGFACE_API_KEY
 
 ---
 
-# ▶️ Running the Backend
+# ▶️ Run Backend
 
 Navigate to backend
 
@@ -177,13 +220,13 @@ Start FastAPI
 uvicorn app:app --reload
 ```
 
-Backend will run on
+Backend URL
 
 ```
 http://127.0.0.1:8000
 ```
 
-Swagger Documentation
+Swagger API
 
 ```
 http://127.0.0.1:8000/docs
@@ -191,57 +234,7 @@ http://127.0.0.1:8000/docs
 
 ---
 
-# 📦 API Endpoints
-
-## Load Video
-
-```
-POST /load-video
-```
-
-Example
-
-```json
-{
-    "video_id":"LPZh9BOjkQs"
-}
-```
-
-Response
-
-```json
-{
-    "status":"success"
-}
-```
-
----
-
-## Chat
-
-```
-POST /chat
-```
-
-Example
-
-```json
-{
-    "question":"What is this video about?"
-}
-```
-
-Response
-
-```json
-{
-    "answer":"..."
-}
-```
-
----
-
-# 🌐 Loading Chrome Extension
+# 🧩 Load Chrome Extension
 
 Open Chrome
 
@@ -261,115 +254,122 @@ Click
 Load unpacked
 ```
 
-Select
-
-```
-extension/
-```
-
-The extension is now installed.
+Select the **extension** folder.
 
 ---
 
-# 💬 Using the Extension
+# 💬 Usage
 
-1. Open the extension.
-2. Enter a YouTube Video ID.
-3. Click **Load Video**.
-4. Wait until the transcript is indexed.
-5. Ask any question.
-6. Receive answers generated from the transcript.
+1. Open any YouTube video.
+2. Click the extension icon.
+3. The extension automatically detects the current video.
+4. Click **Load Transcript**.
+5. Wait until the transcript is processed.
+6. Ask questions about the video.
+7. Receive AI-generated answers based only on the transcript.
 
 ---
 
-# 🧠 How RAG Works
+# 📡 API Endpoints
 
-### Step 1
+## Load Video
+
+### POST
+
+```
+/load-video
+```
+
+Request
+
+```json
+{
+    "video_id":"LPZh9BOjkQs"
+}
+```
+
+Response
+
+```json
+{
+    "status":"success"
+}
+```
+
+---
+
+## Chat
+
+### POST
+
+```
+/chat
+```
+
+Request
+
+```json
+{
+    "question":"What is this video about?"
+}
+```
+
+Response
+
+```json
+{
+    "answer":"..."
+}
+```
+
+---
+
+# 🧠 RAG Pipeline
+
+```
+YouTube Video
+
+      │
+
+      ▼
 
 Fetch Transcript
 
-```
-YouTube Transcript API
-```
+      │
 
-↓
+      ▼
 
-### Step 2
+Split into Chunks
 
-Split transcript
+      │
 
-```
-RecursiveCharacterTextSplitter
-```
+      ▼
 
-↓
+Generate Embeddings
 
-### Step 3
+      │
 
-Generate embeddings
+      ▼
 
-```
-all-MiniLM-L6-v2
-```
+Store in FAISS
 
-↓
+      │
 
-### Step 4
-
-Store embeddings
-
-```
-FAISS
-```
-
-↓
-
-### Step 5
-
-Retrieve relevant chunks
-
-↓
-
-### Step 6
-
-Send context to Llama 3.1
-
-↓
-
-### Step 7
-
-Generate final answer
-
----
-
-# 📚 Example Workflow
-
-```
-User Question
-
-        │
-
-        ▼
+      ▼
 
 Retrieve Similar Chunks
 
-        │
+      │
 
-        ▼
+      ▼
 
-Prompt Template
+Prompt Llama 3.1
 
-        │
+      │
 
-        ▼
+      ▼
 
-Llama 3.1
-
-        │
-
-        ▼
-
-Answer
+Generate Answer
 ```
 
 ---
@@ -377,36 +377,37 @@ Answer
 # 🔒 Environment Variables
 
 ```
-HF_TOKEN=your_huggingface_api_key
+HF_TOKEN=YOUR_HUGGINGFACE_API_KEY
 ```
 
-Never expose this key in the Chrome Extension.
+Never expose your Hugging Face API key inside the Chrome extension.
 
 ---
 
 # 📌 Current Limitations
 
-- Requires transcript availability.
-- Supports English transcripts.
-- Builds a new FAISS index when a different video is loaded.
-- Uses Hugging Face Inference API (subject to API limits).
+- Only supports videos with **English transcripts**.
+- Videos without transcripts are not supported.
+- Hindi-only or other non-English transcripts are not supported.
+- Builds a new FAISS index whenever a new video is loaded.
+- Requires an active FastAPI backend.
 
 ---
 
 # 🚀 Future Improvements
 
-- Automatically detect the current YouTube video ID.
-- Conversation history.
-- Streaming AI responses.
-- Multiple LLM providers (OpenAI, Gemini, Groq).
-- Persistent FAISS caching.
-- Voice input.
-- Dark mode.
-- Export conversation.
-- Support multilingual transcripts.
-- User authentication.
-- Cloud deployment.
-- Docker support.
+- 🌍 Support transcript translation
+- 💬 Conversation history
+- ⚡ Streaming AI responses
+- 📋 Copy AI responses
+- 🌙 Dark mode
+- 🔊 Voice input
+- 📄 Export conversations
+- 🗂 Cache FAISS indexes by video ID
+- ☁️ Deploy backend to Railway/Render/AWS
+- 🐳 Docker support
+- 🔐 User authentication
+- 🤖 Multiple LLM providers (Gemini, OpenAI, Groq)
 
 ---
 
@@ -421,7 +422,36 @@ The backend can be deployed to:
 - AWS
 - DigitalOcean
 
-Update the extension's API URL to point to your deployed backend.
+Once deployed, update the API URL in `popup.js` to point to your hosted backend.
+
+---
+
+# 📚 Learning Concepts
+
+This project demonstrates:
+
+- Chrome Extension Development
+- FastAPI
+- LangChain
+- Retrieval-Augmented Generation (RAG)
+- FAISS Vector Database
+- Embedding Models
+- Hugging Face Inference API
+- Prompt Engineering
+- Semantic Search
+- REST APIs
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Push to your branch.
+5. Open a Pull Request.
 
 ---
 
@@ -431,19 +461,20 @@ This project is licensed under the MIT License.
 
 ---
 
-# 🙌 Acknowledgements
+# 🙏 Acknowledgements
 
 - LangChain
-- Hugging Face
 - FastAPI
+- Hugging Face
 - FAISS
 - Sentence Transformers
 - YouTube Transcript API
+- Google Chrome Extensions
 
 ---
 
 # ⭐ Support
 
-If you found this project useful, consider giving it a ⭐ on GitHub.
+If you found this project helpful, please consider giving it a ⭐ on GitHub.
 
-Contributions, issues, and feature requests are welcome!
+Your support helps improve the project and motivates future development.
