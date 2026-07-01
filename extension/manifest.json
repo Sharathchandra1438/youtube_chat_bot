@@ -8,15 +8,14 @@
     "default_icon": "icon.png"
   },
 
-  "icons": {
-    "128": "icon.png"
-  },
-
   "permissions": [
+    "activeTab",
+    "tabs",
     "storage"
   ],
 
   "host_permissions": [
+    "https://*.youtube.com/*",
     "http://127.0.0.1:8000/*"
   ]
 }

@@ -1,110 +1,184 @@
+let currentVideoId = "";
+
 const status = document.getElementById("status");
 const chatBox = document.getElementById("chatBox");
 
-function addMessage(text, type) {
+function addMessage(text, type){
 
     const div = document.createElement("div");
 
-    div.className = `message ${type}`;
+    div.className = "message " + type;
 
     div.innerHTML = text;
 
     chatBox.appendChild(div);
 
     chatBox.scrollTop = chatBox.scrollHeight;
+
 }
 
-document.getElementById("loadVideo").addEventListener("click", async () => {
-
-    const videoId = document.getElementById("videoId").value.trim();
-
-    if (!videoId) {
-        status.innerHTML = "Enter a Video ID";
-        return;
-    }
-
-    status.innerHTML = "Loading transcript...";
+async function detectVideo() {
 
     try {
 
-        const response = await fetch("http://127.0.0.1:8000/load-video", {
+        const tabs = await chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        });
 
-            method: "POST",
+        console.log("Tabs:", tabs);
 
-            headers: {
-                "Content-Type": "application/json"
+        if (tabs.length === 0) {
+            console.log("No active tab");
+            return;
+        }
+
+        const tab = tabs[0];
+
+        console.log(tab);
+
+        if (!tab.url) {
+            console.log("tab.url is undefined");
+            document.getElementById("videoTitle").innerText =
+                "Cannot access this page";
+            return;
+        }
+
+        console.log("URL:", tab.url);
+
+        const url = new URL(tab.url);
+
+        currentVideoId = url.searchParams.get("v");
+
+        console.log("Video ID:", currentVideoId);
+
+        document.getElementById("videoTitle").innerText = tab.title;
+        document.getElementById("videoId").innerText = currentVideoId;
+
+    } catch (err) {
+        console.error(err);
+    }
+
+}
+
+detectVideo();
+
+document.getElementById("loadVideo").addEventListener("click",async()=>{
+
+    console.log("Load button clicked");
+
+    console.log("Current Video ID:", currentVideoId);
+
+    if(currentVideoId==""){
+
+        status.innerHTML="No Video Found";
+
+        return;
+
+    }
+
+    status.innerHTML="Loading Transcript...";
+
+    try{
+
+        const response = await fetch("http://127.0.0.1:8000/load-video",{
+
+            method:"POST",
+
+            headers:{
+
+                "Content-Type":"application/json"
+
             },
 
-            body: JSON.stringify({
-                video_id: videoId
+            body:JSON.stringify({
+
+                video_id:currentVideoId
+
             })
 
         });
 
-        if (response.ok) {
+        if(response.ok){
 
-            status.innerHTML = "Video Loaded Successfully";
+            status.innerHTML="Transcript Loaded";
 
-        } else {
+        }
 
-            status.innerHTML = "Failed to load video";
+        else{
+
+            status.innerHTML="Failed";
 
         }
 
     }
 
-    catch (e) {
+    catch{
 
-        status.innerHTML = "Backend Not Running";
+        status.innerHTML="Backend Not Running";
 
     }
 
 });
 
-document.getElementById("ask").addEventListener("click", async () => {
+document.getElementById("ask").addEventListener("click",async()=>{
 
-    const questionInput = document.getElementById("question");
+    const questionBox=document.getElementById("question");
 
-    const question = questionInput.value.trim();
+    const question=questionBox.value.trim();
 
-    if (!question)
+    if(question=="")
         return;
 
-    addMessage(question, "user");
+    addMessage(question,"user");
 
-    questionInput.value = "";
+    questionBox.value="";
 
-    status.innerHTML = "Thinking...";
+    status.innerHTML="Thinking...";
 
-    try {
+    try{
 
-        const response = await fetch("http://127.0.0.1:8000/chat", {
+        const response=await fetch("http://127.0.0.1:8000/chat",{
 
-            method: "POST",
+            method:"POST",
 
-            headers: {
-                "Content-Type": "application/json"
+            headers:{
+
+                "Content-Type":"application/json"
+
             },
 
-            body: JSON.stringify({
-                question: question
+            body:JSON.stringify({
+
+                question:question
+
             })
 
         });
 
-        const data = await response.json();
+        const data=await response.json();
 
-        addMessage(data.answer, "bot");
+        addMessage(data.answer,"bot");
 
-        status.innerHTML = "Ready";
+        status.innerHTML="Ready";
 
     }
 
-    catch (e) {
+    catch{
 
-        addMessage("Unable to connect to backend.", "bot");
+        addMessage("Unable to connect to backend.","bot");
 
-        status.innerHTML = "Error";
+        status.innerHTML="Error";
+
+    }
+
+});
+
+document.getElementById("question").addEventListener("keypress",function(e){
+
+    if(e.key==="Enter"){
+
+        document.getElementById("ask").click();
 
     }
 

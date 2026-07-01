@@ -62,7 +62,7 @@ def load_video(video_id: str):
 
         fetched_transcript = YouTubeTranscriptApi().fetch(
             video_id,
-            languages=["en"],
+            languages=["en", "en-US", "en-GB"]
         )
 
         transcript_list = fetched_transcript.to_raw_data()

@@ -9,42 +9,48 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h2>YouTube AI Chat</h2>
+    <h2>YouTube AI Chat</h2>
 
-        <input
-            id="videoId"
-            type="text"
-            placeholder="Enter YouTube Video ID">
+    <div class="video-card">
 
-        <button id="loadVideo">
-            Load Video
-        </button>
+        <h3 id="videoTitle">
+            Loading...
+        </h3>
 
-        <div id="status" class="status">
-            Ready
-        </div>
-
-        <div id="chatBox"></div>
-
-        <div class="bottom">
-
-            <input
-                id="question"
-                type="text"
-                placeholder="Ask anything about the video...">
-
-            <button id="ask">
-                Send
-            </button>
-
-        </div>
+        <p id="videoId">
+            Detecting current video...
+        </p>
 
     </div>
 
-    <script src="popup.js"></script>
+    <button id="loadVideo">
+        Load Transcript
+    </button>
+
+    <div id="status" class="status">
+        Ready
+    </div>
+
+    <div id="chatBox"></div>
+
+    <div class="bottom">
+
+        <input
+            id="question"
+            type="text"
+            placeholder="Ask anything about this video">
+
+        <button id="ask">
+            Send
+        </button>
+
+    </div>
+
+</div>
+
+<script src="popup.js"></script>
 
 </body>
-
 </html>

@@ -1,85 +1,118 @@
-body {
-    margin: 0;
-    background: #f4f6f9;
-    font-family: Arial, Helvetica, sans-serif;
-    width: 380px;
+body{
+
+    width:380px;
+    margin:0;
+    background:#f4f6f9;
+    font-family:Arial;
+
 }
 
-.container {
-    padding: 15px;
+.container{
+
+    padding:15px;
+
 }
 
-h2 {
-    text-align: center;
-    color: #202124;
+h2{
+
+    text-align:center;
+
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    box-sizing: border-box;
-    font-size: 14px;
+.video-card{
+
+    background:white;
+    border-radius:10px;
+    padding:10px;
+    border:1px solid #ddd;
+
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    background: #2563eb;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+#videoTitle{
+
+    font-size:16px;
+    margin:0;
+
 }
 
-button:hover {
-    background: #1d4ed8;
+#videoId{
+
+    color:gray;
+    font-size:12px;
+
 }
 
-.status {
-    margin-top: 12px;
-    padding: 8px;
-    text-align: center;
-    background: #eef2ff;
-    color: #1e40af;
-    border-radius: 8px;
-    font-size: 13px;
+button{
+
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+
 }
 
-#chatBox {
-    margin-top: 15px;
-    height: 300px;
-    overflow-y: auto;
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
+button:hover{
+
+    background:#1d4ed8;
+
 }
 
-.message {
-    margin-bottom: 12px;
-    max-width: 90%;
-    padding: 10px;
-    border-radius: 12px;
-    word-wrap: break-word;
-    font-size: 14px;
+.status{
+
+    margin-top:10px;
+    background:#eef2ff;
+    padding:8px;
+    border-radius:8px;
+    text-align:center;
+
 }
 
-.user {
-    background: #2563eb;
-    color: white;
-    margin-left: auto;
+#chatBox{
+
+    margin-top:15px;
+    height:300px;
+    overflow:auto;
+    background:white;
+    border-radius:10px;
+    border:1px solid #ddd;
+    padding:10px;
+
 }
 
-.bot {
-    background: #ececec;
-    color: black;
+.message{
+
+    margin-bottom:10px;
+    padding:10px;
+    border-radius:10px;
+    max-width:90%;
+
 }
 
-.bottom {
-    margin-top: 12px;
+.user{
+
+    background:#2563eb;
+    color:white;
+    margin-left:auto;
+
+}
+
+.bot{
+
+    background:#ececec;
+
+}
+
+input{
+
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    box-sizing:border-box;
+
 }
