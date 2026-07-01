@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube AI Chat</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>YouTube AI Chat</h2>
+
+        <input
+            id="videoId"
+            type="text"
+            placeholder="Enter YouTube Video ID">
+
+        <button id="loadVideo">
+            Load Video
+        </button>
+
+        <div id="status" class="status">
+            Ready
+        </div>
+
+        <div id="chatBox"></div>
+
+        <div class="bottom">
+
+            <input
+                id="question"
+                type="text"
+                placeholder="Ask anything about the video...">
+
+            <button id="ask">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+    <script src="popup.js"></script>
+
+</body>
+
+</html>
